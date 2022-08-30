@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
 import { instance } from './Api/axios';
 import RNApkInstallerN from 'react-native-apk-installer-n';
-import * as FileSystem from 'expo-file-system';
 
 
 export default function App() {
@@ -24,7 +23,7 @@ export default function App() {
   };
   const renderCard = (item, i) => {
     return (
-      <View style={styles.cardVeiw}>
+      <View style={styles.cardVeiw} key={i}>
         <TouchableOpacity style={styles.cardVeiw} onPress={() => { Linking.openURL(`http://play.google.com/store/apps/details?id=${item.apkpackagename}`) }}>
           <Image source={{ uri: item.apkicon }} style={{ width: 200, height: 200 }} />
           <View style={{ alignItems: 'center', width: '100%' }}>
