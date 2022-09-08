@@ -16,7 +16,7 @@ export default function App() {
     try {
       const response = await instance.get("apiG0")
       console.log('response is', response.data)
-      setData(response.data.data);
+      setData(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -24,11 +24,14 @@ export default function App() {
   const renderCard = (item, i) => {
     return (
       <View style={styles.cardVeiw} key={i}>
-        <TouchableOpacity style={styles.cardVeiw} onPress={() => { Linking.openURL(`http://play.google.com/store/apps/details?id=${item.apkpackagename}`) }}>
-          <Image source={{ uri: item.apkicon }} style={{ width: 200, height: 200 }} />
+        <TouchableOpacity style={styles.cardVeiw} onPress={() => {
+
+          { item.app_download == "" || item.app_download == undefined ? Linking.openURL(`http://play.google.com/store/apps/details?id=${item.package_name}`) : Linking.openURL(item.app_download) }
+        }}>
+          <Image source={{ uri: item.app_icon }} style={{ width: 200, height: 200 }} />
           <View style={{ alignItems: 'center', width: '100%' }}>
-            <Text style={styles.appName}>{item.apkname}</Text>
-            <Text style={styles.appVersion}>{item.apkversionname}</Text>
+            <Text style={styles.appName}>{item.app_name}</Text>
+            <Text style={styles.appVersion}>{item.app_version}</Text>
           </View>
         </TouchableOpacity>
       </View>
