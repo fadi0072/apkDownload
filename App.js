@@ -5,7 +5,6 @@ import { instance } from './Api/axios';
 import RNApkInstallerN from 'react-native-apk-installer-n';
 
 
-
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -32,9 +31,12 @@ function HomeScreen({ navigation }) {
 
 <TouchableOpacity  onPress={() => {
 
-// navigation.navigate('Details')
+navigation.navigate('Details',{
 
-          { item.item.app_download == "" || item.item.app_download == undefined ? Linking.openURL(`http://play.google.com/store/apps/details?id=${item.item.package_name}`) : Linking.openURL(item.item.app_download) }
+  appData:item.item
+})
+
+          // { item.item.app_download == "" || item.item.app_download == undefined ? Linking.openURL(`http://play.google.com/store/apps/details?id=${item.item.package_name}`) : Linking.openURL(item.item.app_download) }
         }}>
           <Image source={item.item.app_name?{ uri: item.item.app_icon }:require('../apkDownload/assets/apk.png')} style={{ width: 70, height: 70,alignSelf:'center',marginTop:10 }} />
           <View style={{ alignItems: 'center', width: 110,backgroundColor:'#093f46',borderRadius:2 }}>
@@ -68,16 +70,34 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function DetailsScreen({ navigation }) {
+function DetailsScreen({ navigation,route }) {
+  const { appData } = route.params;  console.log(appData)
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-      <Button
-        title="Go to Details... again"
-        onPress={() => navigation.navigate('Home')}
-      />
+    <View style={styles.container}>
+      <View style={styles.AppVeiw}>
+
+        <Image source={{ uri: appData.app_icon }} style={{ width: 90, height: 90 }} />
+        <Text style={styles.boldAppName}>{appData.app_name}</Text>
+
+
+      </View>
+      <View style={styles.innerView}>
+        <Image source={{ uri: appData.app_header_icon }} style={{ width: 50, height: 50, bottom: '7%' }} />
+        <TouchableOpacity style={styles.installBtn} onPress={() => {
+
+
+          { appData.app_download == "" || appData.app_download == undefined ? Linking.openURL(`http://play.google.com/store/apps/details?id=${appData.package_name}`) : Linking.openURL(appData.app_download) }
+
+        }}>
+          <Text style={styles.installTxt}>Install</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.descView}>
+        <Text style={styles.descTexT}>{appData.app_description}</Text>
+      </View>
     </View>
   );
+
 }
 
 const Stack = createNativeStackNavigator();
@@ -101,6 +121,50 @@ const styles = StyleSheet.create({
     backgroundColor: '#202124',
 
   },
+
+
+  AppVeiw: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white'
+
+  },
+  installBtn: {
+    height: 40,
+    width: 60,
+    backgroundColor: '#161B22',
+    left: '45%',
+    top: '4%'
+  },
+  installTxt: {
+    color: 'white',
+    alignSelf: 'center',
+    marginVertical: '15%'
+  },
+  innerView: {
+    height: '10%',
+    backgroundColor: '#222E35',
+    flexDirection: 'row',
+    paddingHorizontal: '10%'
+  },
+  descView: {
+    margin: '10%',
+
+  },
+  descTexT: {
+    color: 'white'
+  },
+  appName: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: '800'
+  },
+  boldAppName: {
+    fontSize: 50,
+    fontWeight: 'bold'
+  },
+
   cardVeiw: {
     marginHorizontal: '2%',
     marginVertical: '10%',
